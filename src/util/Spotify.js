@@ -28,6 +28,11 @@ const Spotify = {
   },
   search: async function(searchTerm) {
     let accessToken = await this.getAccessToken();
+    if (!accessToken) {
+      console.log('No access token present.');
+      return [];
+    }
+
     const term = encodeURI(searchTerm);
     return fetch(`https://api.spotify.com/v1/search?q=${term}&type=track`, {
       headers: { Authorization: `Bearer ${accessToken}` }
@@ -40,7 +45,7 @@ const Spotify = {
     }, networkError => console.log(networkError.message)
     )
     .then(jsonResponse => {
-      if (jsonResponse.tracks) {
+      if (jsonResponse && jsonResponse.tracks) {
         return jsonResponse.tracks.items.map(track => {
           return {
             id: track.id,
@@ -51,7 +56,7 @@ const Spotify = {
           }
         });
       }
-      else if (jsonResponse.error) {
+      else if (jsonResponse && jsonResponse.error) {
         console.log(`Search query error: ${jsonResponse.error.message}`);
       }
       else {
@@ -65,6 +70,10 @@ const Spotify = {
     }
 
     let accessToken = await this.getAccessToken();
+    if (!accessToken) {
+      console.log('No access token present.');
+      return;
+    }
 
     // Fetch user ID
     const headers = { Authorization: `Bearer ${accessToken}`,
