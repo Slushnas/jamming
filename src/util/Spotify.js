@@ -11,7 +11,7 @@ const Spotify = {
       console.log('Access token already exists: ' + currentAccessToken);
       return currentAccessToken;
     };
-    let accessToken = /access_token=(.*)&/.exec(window.location.href);
+    let accessToken = /access_token=(.*?)&/.exec(window.location.href);
     let expirationTime = /expires_in=(.*)/.exec(window.location.href);
     if (accessToken && expirationTime) {
       console.log('Acquired access token: ' + accessToken);
