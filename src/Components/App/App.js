@@ -19,6 +19,24 @@ class App extends Component {
     this.search = this.search.bind(this);
   }
 
+  componentDidMount() {
+    // TODO: break this functionality out into a new function called parseUserAuthorization()
+    Spotify.getAccessToken();
+    const searchTerm = sessionStorage.getItem('searchTerm');
+    if (searchTerm) {
+      // Simply setting the input value with "input.value =" won't work as it
+      // doesn't trigger the React onChange event handler so we have to do this instead.
+      const searchTermInput = document.getElementById('searchTerm');
+      const setValue = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
+      const event = new Event('input', { bubbles: true });
+      setValue.call(searchTermInput, searchTerm);
+      searchTermInput.dispatchEvent(event);
+
+      this.search(searchTerm);
+      sessionStorage.removeItem('searchTerm');
+    }
+  }
+
   addTrack(track) {
     if (this.state.playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
       return;

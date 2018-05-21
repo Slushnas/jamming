@@ -21,8 +21,7 @@ const Spotify = {
       window.history.pushState('Access Token', null, '/');
       return currentAccessToken;
     } else {
-      console.log('No access token found. Redirecting.');
-      window.location.replace(authorizationUrl);
+      console.log('No access token found.');
       return '';
     }
   },
@@ -30,6 +29,8 @@ const Spotify = {
     let accessToken = await this.getAccessToken();
     if (!accessToken) {
       console.log('No access token present.');
+      sessionStorage.setItem('searchTerm', searchTerm);
+      window.location.replace(authorizationUrl);
       return [];
     }
 
@@ -72,6 +73,8 @@ const Spotify = {
     let accessToken = await this.getAccessToken();
     if (!accessToken) {
       console.log('No access token present.');
+      // Save playlist information to session storage here
+      window.location.replace(authorizationUrl);
       return;
     }
 
